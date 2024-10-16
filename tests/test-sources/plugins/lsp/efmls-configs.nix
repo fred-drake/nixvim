@@ -28,6 +28,9 @@
           # Swift broken everywhere atm
           "swiftformat"
           "swiftlint"
+          # TODO: added 2024-10-15
+          # re-enable after fixed
+          "dmd"
         ]
         ++ lib.optionals (system == "aarch64-linux") [
           # Broken as of 2024-07-13
@@ -39,24 +42,12 @@
           # TODO: re-enable those tests when fixed
           "chktex"
           "latexindent"
-          # TODO: added 2024-10-01 re-enable when fixed
-          # broken https://github.com/NixOS/nixpkgs/issues/345331
-          "php"
-          "phan"
-          "phpstan"
-          "psalm"
-          "phpcbf"
-          "php_cs_fixer"
-          "phpcs"
         ]
         ++ lib.optionals (system == "x86_64-darwin") [
           # As of 2024-07-31, dmd is broken on x86_64-darwin
           # https://github.com/NixOS/nixpkgs/pull/331373
           # TODO: re-enable this test when fixed
           "dmd"
-          # As of 2024-01-04, luaformat is broken on x86_64-darwin
-          # TODO: re-enable this test when fixed
-          "lua_format"
         ];
 
       unpackaged =
