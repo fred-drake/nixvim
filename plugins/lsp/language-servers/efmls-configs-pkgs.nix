@@ -16,6 +16,7 @@ in
     "forge_fmt"
     "gersemi"
     "js_standard"
+    "kdlfmt"
     "markuplint"
     "mix"
     "pint"
@@ -86,6 +87,7 @@ in
       "shfmt"
       "smlfmt"
       "sqlfluff"
+      "sql-formatter"
       "statix"
       "stylua"
       "taplo"
@@ -109,7 +111,6 @@ in
         "eslint_d"
         "jsonlint"
         "prettier"
-        "sql-formatter"
         "stylelint"
         "textlint"
       ];
