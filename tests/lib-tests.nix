@@ -318,6 +318,47 @@ let
       };
     };
 
+    testLiteralLua = {
+      expr = builtins.mapAttrs (_: helpers.literalLua) {
+        print = "print('hi')";
+        nil = "nil";
+        table = "{}";
+      };
+      expected = builtins.mapAttrs (_: lib.literalExpression) {
+        print = ''lib.nixvim.mkRaw "print('hi')"'';
+        nil = ''lib.nixvim.mkRaw "nil"'';
+        table = ''lib.nixvim.mkRaw "{}"'';
+      };
+    };
+
+    # Integration test for nestedLiteral and renderOptionValue
+    testNestedLiteral_withRenderOptionValue = {
+      expr =
+        builtins.mapAttrs
+          (
+            _: v:
+            (lib.options.renderOptionValue {
+              literal = helpers.nestedLiteral v;
+            }).text
+          )
+          {
+            empty = "";
+            sum = "1 + 1";
+            print = ''lib.mkRaw "print('hi')"'';
+          };
+      expected =
+        builtins.mapAttrs
+          (_: literal: ''
+            {
+              literal = ${literal};
+            }'')
+          {
+            empty = "";
+            sum = "1 + 1";
+            print = ''lib.mkRaw "print('hi')"'';
+          };
+    };
+
     testUpperFirstChar = {
       expr = map helpers.upperFirstChar [
         "foo"
