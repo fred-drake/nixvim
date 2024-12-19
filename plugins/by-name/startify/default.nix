@@ -4,10 +4,10 @@
   ...
 }:
 with lib;
-with helpers.vim-plugin;
+with lib.nixvim.vim-plugin;
 mkVimPlugin {
   name = "startify";
-  originalName = "vim-startify";
+  packPathName = "vim-startify";
   package = "vim-startify";
   globalPrefix = "startify_";
 
@@ -39,58 +39,39 @@ mkVimPlugin {
     "customFooter"
     "relativePath"
     "useEnv"
+    {
+      old = "updateOldFiles";
+      new = "update_oldfiles";
+    }
+    {
+      old = "skipList";
+      new = "skiplist";
+    }
+    {
+      old = "useUnicode";
+      new = "fortune_use_unicode";
+    }
+    {
+      old = "skipListServer";
+      new = "skiplist_server";
+    }
+    {
+      old = "sessionSaveVars";
+      new = "session_savevars";
+    }
+    {
+      old = "sessionCmds";
+      new = "session_savecmds";
+    }
+    {
+      old = "customQuotes";
+      new = "custom_header_quotes";
+    }
+    {
+      old = "disableAtVimEnter";
+      new = "disable_at_vimenter";
+    }
   ];
-  imports =
-    map
-      (
-        option:
-        mkRenamedOptionModule
-          [
-            "plugins"
-            "startify"
-            option.old
-          ]
-          [
-            "plugins"
-            "startify"
-            "settings"
-            option.new
-          ]
-      )
-      [
-        {
-          old = "updateOldFiles";
-          new = "update_oldfiles";
-        }
-        {
-          old = "skipList";
-          new = "skiplist";
-        }
-        {
-          old = "useUnicode";
-          new = "fortune_use_unicode";
-        }
-        {
-          old = "skipListServer";
-          new = "skiplist_server";
-        }
-        {
-          old = "sessionSaveVars";
-          new = "session_savevars";
-        }
-        {
-          old = "sessionCmds";
-          new = "session_savecmds";
-        }
-        {
-          old = "customQuotes";
-          new = "custom_header_quotes";
-        }
-        {
-          old = "disableAtVimEnter";
-          new = "disable_at_vimenter";
-        }
-      ];
 
   settingsOptions = import ./options.nix { inherit lib helpers; };
 

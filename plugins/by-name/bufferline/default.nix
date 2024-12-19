@@ -10,7 +10,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "bufferline";
-  originalName = "bufferline.nvim";
+  packPathName = "bufferline.nvim";
   package = "bufferline-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
@@ -82,6 +82,13 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           "logging"
         ]
         "customFilter"
+        {
+          old = "diagnosticsUpdateInInsert";
+          new = [
+            "diagnostics"
+            "update_in_insert"
+          ];
+        }
       ];
 
       oldHighlightOptions = [
@@ -142,6 +149,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         "pickVisible"
         "pickSelected"
         "offsetSeparator"
+        {
+          old = "trunkMarker";
+          new = "trunc_marker";
+        }
       ];
 
       basePluginPath = [
@@ -155,13 +166,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     in
     [
       (lib.mkRenamedOptionModule (basePluginPath ++ [ "extraOptions" ]) optionsPath)
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "diagnosticsUpdateInInsert" ]) [
-        "diagnostics"
-        "update_in_insert"
-      ])
-      (lib.mkRenamedOptionModule (oldHighlightsPath ++ [ "trunkMarker" ]) (
-        newHighlightsPath ++ [ "trunc_marker" ]
-      ))
     ]
     ++ mkSettingsRenamedOptionModules basePluginPath optionsPath oldOptions
     ++ mkSettingsRenamedOptionModules oldHighlightsPath newHighlightsPath oldHighlightOptions;
@@ -654,7 +658,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       };
   };
 
-  extraConfig = cfg: {
+  extraConfig = {
     # TODO: added 2024-09-20 remove after 24.11
     plugins.web-devicons = lib.mkIf (
       !(

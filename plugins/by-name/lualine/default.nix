@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lualine";
-  originalName = "lualine.nvim";
+  packPathName = "lualine.nvim";
   package = "lualine-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
@@ -292,9 +292,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
       inactive_winbar = mkEmptySectionOption "Winbar configuration used when inactive.";
 
-      extensions = defaultNullOpts.mkListOf (
-        with lib.types; either str (attrsOf anything)
-      ) [ ] "List of enabled extensions.";
+      extensions = defaultNullOpts.mkListOf (with lib.types; either str (attrsOf anything)) [
+      ] "List of enabled extensions.";
     };
 
   settingsExample = {

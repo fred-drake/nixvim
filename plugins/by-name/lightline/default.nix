@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lightline";
-  originalName = "lightline.vim";
+  packPathName = "lightline.vim";
   package = "lightline-vim";
 
   maintainers = [ lib.maintainers.khaneliman ];
@@ -22,20 +22,20 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
        settings.component_function = {
          readonly = "LightlineReadonly";
        };
-     };
 
-     extraConfigLua = '''
-       function LightlineReadonly()
-         local is_readonly = vim.bo.readonly == 1
-         local filetype = vim.bo.filetype
+       luaConfig.pre= '''
+         function LightlineReadonly()
+           local is_readonly = vim.bo.readonly == 1
+           local filetype = vim.bo.filetype
 
-         if is_readonly and filetype ~= "help" then
-           return "RO"
-         else
-           return ""
+           if is_readonly and filetype ~= "help" then
+             return "RO"
+           else
+             return ""
+           end
          end
-       end
-     ''';
+       ''';
+     };
   '';
 
   # TODO: Added 2024-08-23, remove after 24.11
@@ -210,7 +210,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   };
 
   callSetup = false;
-  extraConfig = cfg: {
+  extraConfig = {
     globals.lightline = lib.modules.mkAliasAndWrapDefsWithPriority lib.id options.plugins.lightline.settings;
   };
 }

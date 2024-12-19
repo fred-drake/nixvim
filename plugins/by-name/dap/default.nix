@@ -19,7 +19,7 @@ with dapHelpers;
     ./dap-virtual-text.nix
   ];
 
-  options.plugins.dap = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.dap = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "dap";
 
     package = lib.mkPackageOption pkgs "dap" {
@@ -90,13 +90,13 @@ with dapHelpers;
 
       extraConfigLua =
         (optionalString (cfg.adapters != null) ''
-          require("dap").adapters = ${helpers.toLuaObject options.adapters}
+          require("dap").adapters = ${lib.nixvim.toLuaObject options.adapters}
         '')
         + (optionalString (options.configurations != null) ''
-          require("dap").configurations = ${helpers.toLuaObject options.configurations}
+          require("dap").configurations = ${lib.nixvim.toLuaObject options.configurations}
         '')
         + (optionalString (cfg.signs != null) ''
-          local __dap_signs = ${helpers.toLuaObject options.signs}
+          local __dap_signs = ${lib.nixvim.toLuaObject options.signs}
           for sign_name, sign in pairs(__dap_signs) do
             vim.fn.sign_define(sign_name, sign)
           end

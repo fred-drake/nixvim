@@ -4,9 +4,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "hydra";
-  originalName = "hydra.nvim";
+  packPathName = "hydra.nvim";
   package = "hydra-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
@@ -39,9 +39,9 @@ helpers.neovim-plugin.mkNeovimPlugin {
     plugins.hydra.luaConfig.content = ''
       hydra = require('hydra')
 
-      hydra.setup(${helpers.toLuaObject cfg.settings})
+      hydra.setup(${lib.nixvim.toLuaObject cfg.settings})
 
-      __hydra_defs = ${helpers.toLuaObject cfg.hydras}
+      __hydra_defs = ${lib.nixvim.toLuaObject cfg.hydras}
       for _, hydra_config in ipairs(__hydra_defs) do
         hydra(hydra_config)
       end

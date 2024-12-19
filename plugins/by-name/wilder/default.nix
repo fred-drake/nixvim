@@ -63,7 +63,7 @@ in
     )
   ];
 
-  options.plugins.wilder = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.wilder = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "wilder-nvim";
 
     package = lib.mkPackageOption pkgs "wilder-nvim" {
@@ -260,9 +260,9 @@ in
 
       extraConfigLua = ''
         wilder = require("wilder")
-        wilder.setup(${helpers.toLuaObject setupOptions})
+        wilder.setup(${lib.nixvim.toLuaObject setupOptions})
 
-        local __wilderOptions = ${helpers.toLuaObject options}
+        local __wilderOptions = ${lib.nixvim.toLuaObject options}
         for key, value in pairs(__wilderOptions) do
           wilder.set_option(key, value)
         end

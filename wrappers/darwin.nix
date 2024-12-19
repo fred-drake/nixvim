@@ -4,16 +4,10 @@ self:
   config,
   lib,
   ...
-}@args:
+}:
 let
   inherit (lib)
-    mkEnableOption
-    mkOption
-    mkOptionType
-    mkForce
-    mkMerge
     mkIf
-    types
     ;
   cfg = config.programs.nixvim;
   evalArgs = {
@@ -28,7 +22,7 @@ in
 {
   _file = ./darwin.nix;
 
-  imports = [ (import ./_shared.nix { inherit evalArgs; }) ];
+  imports = [ (import ./_shared.nix { inherit self evalArgs; }) ];
 
   config = mkIf cfg.enable {
     environment.systemPackages = [

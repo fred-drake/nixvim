@@ -5,6 +5,7 @@
   ...
 }@args:
 let
+
   # A list of most cmp source plugins, passed to mkCmpSourcePlugin.
   # More complex cmp sources can instead be defined as their own plugin
   # and register their source-name association using the `cmpSourcePlugins` option.
@@ -22,48 +23,24 @@ let
       sourceName = "calc";
     }
     {
-      pluginName = "cmp-dap";
-      sourceName = "dap";
+      pluginName = "cmp-clippy";
+      sourceName = "cmp-clippy";
     }
     {
       pluginName = "cmp-cmdline";
       sourceName = "cmdline";
     }
     {
-      pluginName = "cmp-ai";
-      sourceName = "cmp_ai";
-    }
-    {
-      pluginName = "cmp-clippy";
-      sourceName = "cmp-clippy";
-    }
-    {
       pluginName = "cmp-cmdline-history";
       sourceName = "cmp-cmdline-history";
-    }
-    {
-      pluginName = "cmp-pandoc-nvim";
-      sourceName = "cmp_pandoc";
-    }
-    {
-      pluginName = "cmp-tabby";
-      sourceName = "cmp_tabby";
-    }
-    {
-      pluginName = "cmp-tabnine";
-      sourceName = "cmp_tabnine";
     }
     {
       pluginName = "cmp-conventionalcommits";
       sourceName = "conventionalcommits";
     }
     {
-      pluginName = "copilot-cmp";
-      sourceName = "copilot";
-    }
-    {
-      pluginName = "crates-nvim";
-      sourceName = "crates";
+      pluginName = "cmp-dap";
+      sourceName = "dap";
     }
     {
       pluginName = "cmp-dictionary";
@@ -80,6 +57,9 @@ let
     {
       pluginName = "cmp-fish";
       sourceName = "fish";
+
+      extraOptions.fishPackage = lib.mkPackageOption pkgs "fish" { nullable = true; };
+      extraConfig = cfg: { extraPackages = [ cfg.fishPackage ]; };
     }
     {
       pluginName = "cmp-fuzzy-buffer";
@@ -88,10 +68,6 @@ let
     {
       pluginName = "cmp-fuzzy-path";
       sourceName = "fuzzy_path";
-    }
-    {
-      pluginName = "cmp-git";
-      sourceName = "git";
     }
     {
       pluginName = "cmp-greek";
@@ -114,6 +90,10 @@ let
       sourceName = "nixpkgs_maintainers";
     }
     {
+      pluginName = "cmp-npm";
+      sourceName = "npm";
+    }
+    {
       pluginName = "cmp-nvim-lsp";
       sourceName = "nvim_lsp";
     }
@@ -130,12 +110,16 @@ let
       sourceName = "nvim_lua";
     }
     {
-      pluginName = "cmp-npm";
-      sourceName = "npm";
+      pluginName = "cmp-nvim-ultisnips";
+      sourceName = "ultisnips";
     }
     {
       pluginName = "cmp-omni";
       sourceName = "omni";
+    }
+    {
+      pluginName = "cmp-pandoc-nvim";
+      sourceName = "cmp_pandoc";
     }
     {
       pluginName = "cmp-pandoc-references";
@@ -166,12 +150,12 @@ let
       sourceName = "treesitter";
     }
     {
-      pluginName = "cmp-nvim-ultisnips";
-      sourceName = "ultisnips";
-    }
-    {
       pluginName = "cmp-vim-lsp";
       sourceName = "vim_lsp";
+    }
+    {
+      pluginName = "cmp-vimtex";
+      sourceName = "vimtex";
     }
     {
       pluginName = "cmp-vimwiki-tags";
@@ -196,13 +180,5 @@ let
 in
 {
   # For extra cmp plugins
-  imports = [
-    ./copilot-cmp.nix
-    ./cmp-ai.nix
-    ./cmp-fish.nix
-    ./cmp-git.nix
-    ./cmp-tabby.nix
-    ./cmp-tabnine.nix
-    ./crates-nvim.nix
-  ] ++ pluginModules;
+  imports = pluginModules;
 }

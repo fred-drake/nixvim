@@ -10,7 +10,7 @@ let
   cfg = config.plugins.mkdnflow;
 in
 {
-  options.plugins.mkdnflow = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.mkdnflow = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "mkdnflow.nvim";
 
     package = lib.mkPackageOption pkgs "mkdnflow.nvim" {
@@ -645,7 +645,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("mkdnflow").setup(${helpers.toLuaObject setupOptions})
+        require("mkdnflow").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

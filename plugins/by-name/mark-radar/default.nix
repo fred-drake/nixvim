@@ -10,7 +10,7 @@ let
   cfg = config.plugins.mark-radar;
 in
 {
-  options.plugins.mark-radar = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.mark-radar = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "mark-radar";
 
     package = lib.mkPackageOption pkgs "mark-radar" {
@@ -42,7 +42,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("mark-radar").setup(${helpers.toLuaObject setupOptions})
+        require("mark-radar").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

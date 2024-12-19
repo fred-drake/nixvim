@@ -6,10 +6,10 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "treesitter";
-  originalName = "nvim-treesitter";
-  luaName = "nvim-treesitter.configs";
+  packPathName = "nvim-treesitter";
+  moduleName = "nvim-treesitter.configs";
   package = "nvim-treesitter";
 
   description = ''
@@ -102,7 +102,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
       # treesitter-nu-grammar = pkgs.tree-sitter-grammars.tree-sitter-nu;
     in
     {
-
       programs.nixvim.plugins = {
         treesitter = {
           enable = true;
@@ -110,9 +109,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
           grammarPackages = pkgs.vimPlugins.nvim-treesitter.passthru.allGrammars ++ [
             treesitter-nu-grammar
           ];
-        };
-
-        extraConfigLua =
+          luaConfig.post=
           '''
             do
               local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
@@ -130,15 +127,14 @@ helpers.neovim-plugin.mkNeovimPlugin {
               }
             end
           ''';
+        };
 
         # Add as extra plugins so that their `queries/{language}/*.scm` get
         # installed and can be picked up by `tree-sitter`
         extraPlugins = [
           treesitter-nu-grammar
         ];
-
       };
-
     }
     ```
 
@@ -197,6 +193,27 @@ helpers.neovim-plugin.mkNeovimPlugin {
       "initSelection"
       "scopeIncremental"
     ]
+    {
+      old = "customCaptures";
+      new = [
+        "highlight"
+        "custom_captures"
+      ];
+    }
+    {
+      old = "disabledLanguages";
+      new = [
+        "highlight"
+        "disable"
+      ];
+    }
+    {
+      old = "indent";
+      new = [
+        "indent"
+        "enable"
+      ];
+    }
   ];
 
   imports =
@@ -205,30 +222,10 @@ helpers.neovim-plugin.mkNeovimPlugin {
         "plugins"
         "treesitter"
       ];
-      settingsPath = basePluginPath ++ [ "settings" ];
     in
     [
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "moduleConfig" ]) settingsPath)
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "customCaptures" ]) (
-        settingsPath
-        ++ [
-          "highlight"
-          "custom_captures"
-        ]
-      ))
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "disabledLanguages" ]) (
-        settingsPath
-        ++ [
-          "highlight"
-          "disable"
-        ]
-      ))
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "indent" ]) (
-        settingsPath
-        ++ [
-          "indent"
-          "enable"
-        ]
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "moduleConfig" ]) (
+        basePluginPath ++ [ "settings" ]
       ))
     ];
 
@@ -430,22 +427,20 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   # NOTE: We call setup manually below.
   callSetup = false;
-  # NOTE: We install cfg.package manually so we can install grammars using it.
-  installPackage = false;
 
   extraConfig = cfg: {
     plugins.treesitter.luaConfig.content =
       # NOTE: Upstream state that the parser MUST be at the beginning of runtimepath.
       # Otherwise the parsers from Neovim takes precedent, which may be incompatible with some queries.
       (optionalString (cfg.settings.parser_install_dir != null) ''
-        vim.opt.runtimepath:prepend(${helpers.toLuaObject cfg.settings.parser_install_dir})
+        vim.opt.runtimepath:prepend(${lib.nixvim.toLuaObject cfg.settings.parser_install_dir})
       '')
       + ''
-        require('nvim-treesitter.configs').setup(${helpers.toLuaObject cfg.settings})
+        require('nvim-treesitter.configs').setup(${lib.nixvim.toLuaObject cfg.settings})
       ''
       + (optionalString (cfg.languageRegister != { }) ''
         do
-          local __parserFiletypeMappings = ${helpers.toLuaObject cfg.languageRegister}
+          local __parserFiletypeMappings = ${lib.nixvim.toLuaObject cfg.languageRegister}
 
           for parser_name, ft in pairs(__parserFiletypeMappings) do
             require('vim.treesitter.language').register(parser_name, ft)
@@ -455,10 +450,10 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
     extraFiles = mkIf cfg.nixvimInjections { "queries/nix/injections.scm".source = ./injections.scm; };
 
-    extraPlugins = mkIf (cfg.package != null) [
-      (mkIf cfg.nixGrammars (cfg.package.withPlugins (_: cfg.grammarPackages)))
-      (mkIf (!cfg.nixGrammars) cfg.package)
-    ];
+    # Install the grammar packages if enabled
+    plugins.treesitter.packageDecorator = lib.mkIf cfg.nixGrammars (
+      pkg: pkg.withPlugins (_: cfg.grammarPackages)
+    );
 
     extraPackages = [
       cfg.gccPackage

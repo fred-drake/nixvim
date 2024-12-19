@@ -24,11 +24,9 @@ let
       };
     };
     idris2_lsp = {
-      extraConfig =
-        cfg:
-        mkIf cfg.enable {
-          plugins.idris2.enable = lib.mkDefault true;
-        };
+      extraConfig = {
+        plugins.idris2.enable = lib.mkDefault true;
+      };
     };
     jsonls = {
       settings = cfg: { json = cfg; };
@@ -115,7 +113,7 @@ let
     ts_ls = {
       # NOTE: Provide the plugin default filetypes so that
       # `plugins.lsp.servers.volar.tslsIntegration` doesn't wipe out the default filetypes
-      extraConfig = cfg: {
+      extraConfig = {
         plugins.lsp.servers.ts_ls = {
           filetypes = [
             "javascript"
@@ -127,6 +125,9 @@ let
           ];
         };
       };
+    };
+    tinymist = {
+      settingsOptions = import ./tinymist-settings.nix { inherit lib; };
     };
     vls = {
       extraOptions = {
@@ -219,7 +220,6 @@ in
     ++ renameModules
     ++ [
       ./ccls.nix
-      ./efmls-configs.nix
       ./hls.nix
       ./pylsp.nix
       ./rust-analyzer.nix

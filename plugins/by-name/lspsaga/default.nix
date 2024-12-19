@@ -47,7 +47,7 @@ in
       ];
 
   options = {
-    plugins.lspsaga = helpers.neovim-plugin.extraOptionsOptions // {
+    plugins.lspsaga = lib.nixvim.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "lspsaga.nvim";
 
       package = lib.mkPackageOption pkgs "lspsaga" {
@@ -317,13 +317,13 @@ in
           Auto save file when the rename is done.
         '';
 
-        projectMaxWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
-          1.0
-        ) 0.5 "Width for the `project_replace` float window.";
+        projectMaxWidth =
+          helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5
+            "Width for the `project_replace` float window.";
 
-        projectMaxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
-          1.0
-        ) 0.5 "Height for the `project_replace` float window.";
+        projectMaxHeight =
+          helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5
+            "Height for the `project_replace` float window.";
 
         keys = {
           quit = mkKeymapOption "<C-k>" "Quit rename window or `project_replace` window.";
@@ -636,7 +636,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require('lspsaga').setup(${helpers.toLuaObject setupOptions})
+        require('lspsaga').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

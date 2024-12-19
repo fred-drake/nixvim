@@ -5,10 +5,10 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "ts-autotag";
-  originalName = "nvim-ts-autotag";
-  luaName = "nvim-ts-autotag";
+  packPathName = "nvim-ts-autotag";
+  moduleName = "nvim-ts-autotag";
   package = "nvim-ts-autotag";
 
   maintainers = [ maintainers.GaetanLepage ];
@@ -36,7 +36,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         "skipTags"
       ];
 
-  extraConfig = cfg: {
+  extraConfig = {
     warnings = mkIf (!config.plugins.treesitter.enable) [
       "Nixvim: ts-autotag needs treesitter to function as intended"
     ];

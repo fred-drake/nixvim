@@ -6,9 +6,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "spectre";
-  originalName = "nvim-spectre";
+  packPathName = "nvim-spectre";
   package = "nvim-spectre";
 
   maintainers = [ maintainers.GaetanLepage ];

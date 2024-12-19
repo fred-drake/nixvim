@@ -4,9 +4,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "neoscroll";
-  originalName = "neoscroll.nvim";
+  packPathName = "neoscroll.nvim";
   package = "neoscroll-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

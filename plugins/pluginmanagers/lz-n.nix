@@ -9,8 +9,10 @@ let
 in
 nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lz-n";
-  originalName = "lz.n";
+  packPathName = "lz.n";
   maintainers = [ maintainers.psfloyd ];
+  # NOTE: We want to load lz.n as early as possible so that triggers are respected
+  configLocation = "extraConfigLuaPre";
 
   settingsDescription = ''
     Options provided to `vim.g.lz_n`.

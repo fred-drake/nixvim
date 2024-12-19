@@ -95,7 +95,7 @@ in
       ]
     );
 
-  options.plugins.clangd-extensions = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.clangd-extensions = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "clangd_extensions, plugins implementing clangd LSP extensions";
 
     package = lib.mkPackageOption pkgs "clangd_extensions.nvim" {
@@ -265,7 +265,7 @@ in
       extraPlugins = [ cfg.package ];
 
       plugins.lsp.postConfig = ''
-        require("clangd_extensions").setup(${helpers.toLuaObject setupOptions})
+        require("clangd_extensions").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

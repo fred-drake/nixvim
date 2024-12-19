@@ -50,7 +50,7 @@ let
 
   results = lib.runTests {
     testToLuaObject = {
-      expr = helpers.toLuaObject {
+      expr = lib.nixvim.toLuaObject {
         foo = "bar";
         qux = [
           1
@@ -61,23 +61,34 @@ let
       expected = ''{ foo = "bar", qux = { 1, 2, 3 } }'';
     };
 
+    testApplyPrefixToAttrs = {
+      expr = lib.nixvim.applyPrefixToAttrs "prefix_" {
+        foo = 1;
+        bar = 2;
+      };
+      expected = {
+        prefix_foo = 1;
+        prefix_bar = 2;
+      };
+    };
+
     testToLuaObjectRawLua = {
-      expr = helpers.toLuaObject { __raw = "<lua code>"; };
+      expr = lib.nixvim.toLuaObject { __raw = "<lua code>"; };
       expected = "<lua code>";
     };
 
     testToLuaObjectInlineLua = {
-      expr = helpers.toLuaObject (lib.generators.mkLuaInline "<lua code>");
+      expr = lib.nixvim.toLuaObject (lib.generators.mkLuaInline "<lua code>");
       expected = "(<lua code>)";
     };
 
     testToLuaObjectInlineLuaNested = {
-      expr = helpers.toLuaObject { lua = lib.generators.mkLuaInline "<lua code>"; };
+      expr = lib.nixvim.toLuaObject { lua = lib.generators.mkLuaInline "<lua code>"; };
       expected = "{ lua = (<lua code>) }";
     };
 
     testToLuaObjectLuaTableMixingList = {
-      expr = helpers.toLuaObject {
+      expr = lib.nixvim.toLuaObject {
         "__unkeyed...." = "foo";
         bar = "baz";
       };
@@ -85,7 +96,7 @@ let
     };
 
     testToLuaObjectNestedAttrs = {
-      expr = helpers.toLuaObject {
+      expr = lib.nixvim.toLuaObject {
         a = {
           b = 1;
           c = 2;
@@ -98,7 +109,7 @@ let
     };
 
     testToLuaObjectNestedList = {
-      expr = helpers.toLuaObject [
+      expr = lib.nixvim.toLuaObject [
         1
         2
         [
@@ -115,7 +126,7 @@ let
     };
 
     testToLuaObjectNonStringPrims = {
-      expr = helpers.toLuaObject {
+      expr = lib.nixvim.toLuaObject {
         a = 1.0;
         b = 2;
         c = true;
@@ -126,24 +137,24 @@ let
     };
 
     testToLuaObjectNilPrim = {
-      expr = helpers.toLuaObject null;
+      expr = lib.nixvim.toLuaObject null;
       expected = "nil";
     };
 
     testToLuaObjectStringPrim = {
-      expr = helpers.toLuaObject ''
+      expr = lib.nixvim.toLuaObject ''
         foo\bar
         baz'';
       expected = ''"foo\\bar\nbaz"'';
     };
 
     testToLuaObjectDerivation = {
-      expr = helpers.toLuaObject drv;
+      expr = lib.nixvim.toLuaObject drv;
       expected = ''"${drv}"'';
     };
 
     testToLuaObjectDerivationNested = {
-      expr = helpers.toLuaObject {
+      expr = lib.nixvim.toLuaObject {
         a = drv;
         b = {
           c = drv;
@@ -155,7 +166,7 @@ let
     };
 
     testToLuaObjectFilters = {
-      expr = helpers.toLuaObject {
+      expr = lib.nixvim.toLuaObject {
         a = null;
         b = { };
         c = [ ];
@@ -168,7 +179,7 @@ let
     };
 
     testToLuaObjectAttrListFilters = {
-      expr = helpers.toLuaObject {
+      expr = lib.nixvim.toLuaObject {
         a = null;
         b = { };
         c = [ ];
@@ -217,7 +228,7 @@ let
     };
 
     testToLuaObjectEmptyTable = {
-      expr = helpers.toLuaObject {
+      expr = lib.nixvim.toLuaObject {
         a = null;
         b = { };
         c = {
@@ -318,6 +329,47 @@ let
       };
     };
 
+    testLiteralLua = {
+      expr = builtins.mapAttrs (_: helpers.literalLua) {
+        print = "print('hi')";
+        nil = "nil";
+        table = "{}";
+      };
+      expected = builtins.mapAttrs (_: lib.literalExpression) {
+        print = ''lib.nixvim.mkRaw "print('hi')"'';
+        nil = ''lib.nixvim.mkRaw "nil"'';
+        table = ''lib.nixvim.mkRaw "{}"'';
+      };
+    };
+
+    # Integration test for nestedLiteral and renderOptionValue
+    testNestedLiteral_withRenderOptionValue = {
+      expr =
+        builtins.mapAttrs
+          (
+            _: v:
+            (lib.options.renderOptionValue {
+              literal = helpers.nestedLiteral v;
+            }).text
+          )
+          {
+            empty = "";
+            sum = "1 + 1";
+            print = ''lib.mkRaw "print('hi')"'';
+          };
+      expected =
+        builtins.mapAttrs
+          (_: literal: ''
+            {
+              literal = ${literal};
+            }'')
+          {
+            empty = "";
+            sum = "1 + 1";
+            print = ''lib.mkRaw "print('hi')"'';
+          };
+    };
+
     testUpperFirstChar = {
       expr = map helpers.upperFirstChar [
         "foo"
@@ -408,6 +460,34 @@ let
           << EOFFF
           EOF EOFF
           EOFFF'';
+      };
+    };
+
+    testMkLuaConfig = {
+      expr = lib.mapAttrs (_: loc: helpers.modules.mkConfigAt loc "Hello!") {
+        "simple string" = "foo";
+        "simple list" = [
+          "foo"
+          "bar"
+        ];
+        "mkBefore string" = lib.mkBefore "foo";
+        "mkBefore list" = lib.mkBefore [
+          "foo"
+          "bar"
+        ];
+        "mkAfter string" = lib.mkAfter "foo";
+        "mkAfter list" = lib.mkAfter [
+          "foo"
+          "bar"
+        ];
+      };
+      expected = {
+        "simple string".foo = "Hello!";
+        "simple list".foo.bar = "Hello!";
+        "mkBefore string".foo = lib.mkBefore "Hello!";
+        "mkBefore list".foo.bar = lib.mkBefore "Hello!";
+        "mkAfter string".foo = lib.mkAfter "Hello!";
+        "mkAfter list".foo.bar = lib.mkAfter "Hello!";
       };
     };
   };

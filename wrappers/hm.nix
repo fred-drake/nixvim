@@ -4,15 +4,10 @@ self:
   config,
   lib,
   ...
-}@args:
+}:
 let
   inherit (lib)
-    mkEnableOption
-    mkOption
-    mkOptionType
-    mkMerge
     mkIf
-    types
     ;
   cfg = config.programs.nixvim;
   evalArgs = {
@@ -29,7 +24,7 @@ in
 
   imports = [
     (import ./_shared.nix {
-      inherit evalArgs;
+      inherit self evalArgs;
       filesOpt = [
         "xdg"
         "configFile"

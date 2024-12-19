@@ -5,10 +5,10 @@
   ...
 }:
 with lib;
-with helpers.vim-plugin;
+with lib.nixvim.vim-plugin;
 mkVimPlugin {
   name = "ledger";
-  originalName = "vim-ledger";
+  packPathName = "vim-ledger";
   package = "vim-ledger";
   globalPrefix = "ledger_";
 
@@ -19,30 +19,15 @@ mkVimPlugin {
   optionsRenamedToSettings = [
     "detailedFirst"
     "foldBlanks"
+    {
+      old = "maxWidth";
+      new = "maxwidth";
+    }
+    {
+      old = "fillString";
+      new = "fillstring";
+    }
   ];
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "ledger"
-      ];
-    in
-    [
-      (mkRenamedOptionModule (basePluginPath ++ [ "maxWidth" ]) (
-        basePluginPath
-        ++ [
-          "settings"
-          "maxwidth"
-        ]
-      ))
-      (mkRenamedOptionModule (basePluginPath ++ [ "fillString" ]) (
-        basePluginPath
-        ++ [
-          "settings"
-          "fillstring"
-        ]
-      ))
-    ];
 
   extraOptions = {
     ledgerPackage = lib.mkPackageOption pkgs "ledger" {

@@ -7,8 +7,8 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "modus";
-  luaName = "modus-themes";
-  originalName = "modus-themes.nvim";
+  moduleName = "modus-themes";
+  packPathName = "modus-themes.nvim";
   package = "modus-themes-nvim";
   isColorscheme = true;
 
@@ -108,5 +108,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     on_highlights = "function(highlights, colors) end";
   };
 
-  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
+  extraConfig = {
+    opts.termguicolors = lib.mkDefault true;
+  };
 }

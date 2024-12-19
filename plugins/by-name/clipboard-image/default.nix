@@ -85,7 +85,7 @@ in
 {
   meta.maintainers = [ maintainers.GaetanLepage ];
 
-  options.plugins.clipboard-image = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.clipboard-image = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "clipboard-image.nvim";
 
     package = lib.mkPackageOption pkgs "clipboard-image.nvim" {
@@ -145,12 +145,15 @@ in
 
     extraConfigLua =
       let
-        setupOptions = {
-          default = processPluginOptions cfg.default;
-        } // cfg.filetypes // cfg.extraOptions;
+        setupOptions =
+          {
+            default = processPluginOptions cfg.default;
+          }
+          // cfg.filetypes
+          // cfg.extraOptions;
       in
       ''
-        require('clipboard-image').setup(${helpers.toLuaObject setupOptions})
+        require('clipboard-image').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

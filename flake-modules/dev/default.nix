@@ -1,7 +1,10 @@
 { lib, inputs, ... }:
 {
   imports =
-    [ ./devshell.nix ]
+    [
+      ./devshell.nix
+      ./list-plugins
+    ]
     ++ lib.optional (inputs.git-hooks ? flakeModule) inputs.git-hooks.flakeModule
     ++ lib.optional (inputs.treefmt-nix ? flakeModule) inputs.treefmt-nix.flakeModule;
 
@@ -12,9 +15,6 @@
       system,
       ...
     }:
-    let
-      fmt = pkgs.nixfmt-rfc-style;
-    in
     lib.optionalAttrs (inputs.treefmt-nix ? flakeModule) {
       treefmt.config = {
         projectRootFile = "flake.nix";
@@ -24,7 +24,7 @@
           isort.enable = true;
           nixfmt = {
             enable = true;
-            package = fmt;
+            package = pkgs.nixfmt-rfc-style;
           };
           prettier = {
             enable = true;
@@ -69,6 +69,15 @@
         check.enable = false;
 
         settings.hooks = {
+          deadnix = {
+            enable = true;
+
+            settings = {
+              noLambdaArg = true;
+              noLambdaPatternNames = true;
+              edit = true;
+            };
+          };
           treefmt.enable = true;
           typos = {
             enable = true;

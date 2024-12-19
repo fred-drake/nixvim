@@ -4,10 +4,10 @@
   ...
 }:
 with lib;
-with helpers.vim-plugin;
+with lib.nixvim.vim-plugin;
 mkVimPlugin {
   name = "markdown-preview";
-  originalName = "markdown-preview.nvim";
+  packPathName = "markdown-preview.nvim";
   package = "markdown-preview-nvim";
   globalPrefix = "mkdp_";
 
@@ -30,34 +30,14 @@ mkVimPlugin {
     "port"
     "pageTitle"
     "theme"
-  ];
-  imports = [
-    (mkRenamedOptionModule
-      [
-        "plugins"
-        "markdown-preview"
-        "fileTypes"
-      ]
-      [
-        "plugins"
-        "markdown-preview"
-        "settings"
-        "filetypes"
-      ]
-    )
-    (mkRenamedOptionModule
-      [
-        "plugins"
-        "markdown-preview"
-        "browserFunc"
-      ]
-      [
-        "plugins"
-        "markdown-preview"
-        "settings"
-        "browserfunc"
-      ]
-    )
+    {
+      old = "fileTypes";
+      new = "filetypes";
+    }
+    {
+      old = "browserFunc";
+      new = "browserfunc";
+    }
   ];
 
   settingsOptions = {

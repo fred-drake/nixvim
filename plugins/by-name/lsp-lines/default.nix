@@ -4,10 +4,10 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lsp-lines";
-  luaName = "lsp_lines";
-  originalName = "lsp_lines.nvim";
+  moduleName = "lsp_lines";
+  packPathName = "lsp_lines.nvim";
   package = "lsp_lines-nvim";
 
   # This plugin has no settings; it is configured via vim.diagnostic.config
@@ -31,7 +31,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     )
   ];
 
-  extraConfig = cfg: {
+  extraConfig = {
     # Strongly recommended by the plugin, to avoid duplication.
     diagnostics.virtual_text = mkDefault false;
   };

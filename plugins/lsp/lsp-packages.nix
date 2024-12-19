@@ -1,8 +1,8 @@
 {
   unpackaged = [
+    "ada_ls"
     "agda_ls"
     "anakin_language_server"
-    "angularls"
     "antlersls"
     "apex_ls"
     "awk_ls"
@@ -16,6 +16,7 @@
     "bright_script"
     "bsl_ls"
     "buddy_ls"
+    "bufls"
     "bzl"
     "c3_lsp"
     "cadence"
@@ -27,7 +28,6 @@
     "codeqlls"
     "coffeesense"
     "contextive"
-    "coq_lsp"
     "css_variables"
     "cssmodules_ls"
     "cucumber_language_server"
@@ -41,14 +41,11 @@
     "dolmenls"
     "drools_lsp"
     "ds_pinyin_lsp"
-    "earthlyls"
     "ecsact"
-    "elp"
     "ember"
     "esbonio"
     "facility_language_server"
     "fennel_language_server"
-    "fish_lsp"
     "flux_lsp"
     "foam_ls"
     "fsharp_language_server"
@@ -56,7 +53,6 @@
     "gdshader_lsp"
     "ghdl_ls"
     "ginko_ls"
-    "gitlab_ci_ls"
     "glasgow"
     "glint"
     "gradle_ls"
@@ -78,6 +74,7 @@
     "kulala_ls"
     "lean3ls"
     "lelwel_ls"
+    "ltex_plus"
     "luau_lsp"
     "lwc_ls"
     "m68k"
@@ -91,6 +88,7 @@
     "msbuild_project_tools_server"
     "mutt_ls"
     "nelua_lsp"
+    "nextflow_ls"
     "nomad_lsp"
     "ntt"
     "nxls"
@@ -111,7 +109,6 @@
     "prismals"
     "prolog_ls"
     "prosemd_lsp"
-    "protols"
     "pug"
     "puppet"
     "purescriptls"
@@ -125,10 +122,10 @@
     "remark_ls"
     "rescriptls"
     "rnix"
+    "robotcode"
     "robotframework_ls"
     "roc_ls"
     "rome"
-    "rune_languageserver"
     "salt_ls"
     "sixtyfps"
     "slangd"
@@ -147,12 +144,10 @@
     "sqlls"
     "steep"
     "stimulus_ls"
-    "superhtml"
     "svlangserver"
     "tabby_ml"
     "textlsp"
     "theme_check"
-    "thriftls"
     "tsp_server"
     "turtle_ls"
     "tvm_ffi_navigator"
@@ -164,12 +159,8 @@
     "v_analyzer"
     "vdmj"
     "veridian"
-    "veryl_ls"
     "visualforce_ls"
-    "vscoqtop"
-    "vtsls"
     "vuels"
-    "wgsl_analyzer"
     "yang_lsp"
     "yls"
     "ziggy"
@@ -178,6 +169,7 @@
 
   packages = {
     aiken = "aiken";
+    angularls = "angular-language-server";
     ansiblels = "ansible-language-server";
     arduino_language_server = "arduino-language-server";
     asm_lsp = "asm-lsp";
@@ -192,11 +184,15 @@
     bitbake_language_server = "bitbake-language-server";
     blueprint_ls = "blueprint-compiler";
     buck2 = "buck2";
-    bufls = "buf-language-server";
+    buf_ls = "buf";
     ccls = "ccls";
     clangd = "clang-tools";
     clojure_lsp = "clojure-lsp";
     cmake = "cmake-language-server";
+    coq_lsp = [
+      "coqPackages"
+      "coq-lsp"
+    ];
     crystalline = "crystalline";
     csharp_ls = "csharp-ls";
     cssls = "vscode-langservers-extracted";
@@ -214,17 +210,20 @@
     dockerls = "dockerfile-language-server-nodejs";
     dotls = "dot-language-server";
     dprint = "dprint";
+    earthlyls = "earthlyls";
     efm = "efm-langserver";
     elmls = [
       "elmPackages"
       "elm-language-server"
     ];
+    elp = "erlang-language-platform";
     emmet_language_server = "emmet-language-server";
     emmet_ls = "emmet-ls";
     erg_language_server = "erg";
     erlangls = "erlang-ls";
     eslint = "vscode-langservers-extracted";
     fennel_ls = "fennel-ls";
+    fish_lsp = "fish-lsp";
     fortls = "fortls";
     fsautocomplete = "fsautocomplete";
     fstar = "fstar";
@@ -233,6 +232,7 @@
       "haskellPackages"
       "ghcide"
     ];
+    gitlab_ci_ls = "gitlab-ci-ls";
     gleam = "gleam";
     glsl_analyzer = "glsl_analyzer";
     glslls = "glslls";
@@ -303,6 +303,7 @@
     ];
     phpactor = "phpactor";
     postgres_lsp = "postgres-lsp";
+    protols = "protols";
     psalm = [
       "phpPackages"
       "psalm"
@@ -324,8 +325,9 @@
     rls = "rustup";
     rubocop = "rubocop";
     ruby_lsp = "ruby-lsp";
-    ruff = "ruff";
     ruff_lsp = "ruff-lsp";
+    ruff = "ruff";
+    rune_languageserver = "rune-languageserver";
     rust_analyzer = "rust-analyzer";
     scheme_langserver = [
       "akkuPackages"
@@ -351,6 +353,7 @@
     starpls = "starpls-bin";
     statix = "statix";
     stylelint_lsp = "stylelint-lsp";
+    superhtml = "superhtml";
     svelte = "svelte-language-server";
     svls = "svls";
     swift_mesonls = "mesonlsp";
@@ -373,9 +376,11 @@
     terraformls = "terraform-ls";
     texlab = "texlab";
     tflint = "tflint";
+    thriftls = "thrift-ls";
     tilt_ls = "tilt";
     tinymist = "tinymist";
     ts_ls = "typescript-language-server";
+    ts_query_ls = "ts_query_ls";
     ttags = "ttags";
     typeprof = "ruby";
     typos_lsp = "typos-lsp";
@@ -385,10 +390,17 @@
     vala_ls = "vala-language-server";
     vale_ls = "vale-ls";
     verible = "verible";
+    veryl_ls = "veryl";
     vhdl_ls = "vhdl-ls";
     vimls = "vim-language-server";
     vls = "vlang";
     volar = "vue-language-server";
+    vscoqtop = [
+      "coqPackages"
+      "vscoq-language-server"
+    ];
+    vtsls = "vtsls";
+    wgsl_analyzer = "wgsl-analyzer";
     yamlls = "yaml-language-server";
     zk = "zk";
     zls = "zls";

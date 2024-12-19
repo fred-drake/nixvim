@@ -4,10 +4,10 @@
   ...
 }:
 with lib;
-with helpers.vim-plugin;
+with lib.nixvim.vim-plugin;
 mkVimPlugin {
   name = "emmet";
-  originalName = "emmet-vim";
+  packPathName = "emmet-vim";
   package = "emmet-vim";
   globalPrefix = "user_emmet_";
 
@@ -15,21 +15,12 @@ mkVimPlugin {
 
   # TODO introduced 2024-03-01: remove 2024-05-01
   deprecateExtraConfig = true;
-  optionsRenamedToSettings = [ "mode" ];
-  imports = [
-    (mkRenamedOptionModule
-      [
-        "plugins"
-        "emmet"
-        "leader"
-      ]
-      [
-        "plugins"
-        "emmet"
-        "settings"
-        "leader_key"
-      ]
-    )
+  optionsRenamedToSettings = [
+    "mode"
+    {
+      old = "leader";
+      new = "leader_key";
+    }
   ];
 
   settingsOptions = {

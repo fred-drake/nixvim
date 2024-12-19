@@ -4,9 +4,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "cloak";
-  originalName = "cloak.nvim";
+  packPathName = "cloak.nvim";
   package = "cloak-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

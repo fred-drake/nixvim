@@ -4,9 +4,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "preview";
-  originalName = "Preview.nvim";
+  packPathName = "Preview.nvim";
   package = "Preview-nvim";
 
   hasSettings = false;

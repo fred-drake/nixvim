@@ -268,6 +268,24 @@
       kind = "string";
     };
   };
+  "rust-analyzer.cargo.sysrootQueryMetadata" = {
+    description = ''
+      How to query metadata for the sysroot crate. Using cargo metadata allows rust-analyzer
+      to analyze third-party dependencies of the standard libraries.
+
+      Values:
+      - none: Do not query sysroot metadata, always use stitched sysroot.
+      - cargo_metadata: Use `cargo metadata` to query sysroot metadata.
+    '';
+    pluginDefault = "cargo_metadata";
+    type = {
+      kind = "enum";
+      values = [
+        "none"
+        "cargo_metadata"
+      ];
+    };
+  };
   "rust-analyzer.cargo.sysrootSrc" = {
     description = ''
       Relative path to the sysroot library sources. If left unset, this will default to
@@ -309,6 +327,15 @@
           kind = "string";
         }
       ];
+    };
+  };
+  "rust-analyzer.cfg.setTest" = {
+    description = ''
+      Set `cfg(test)` for local crates. Defaults to true.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
     };
   };
   "rust-analyzer.check.allTargets" = {
@@ -501,6 +528,17 @@
   "rust-analyzer.checkOnSave" = {
     description = ''
       Run the check command for diagnostics on save.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
+    };
+  };
+  "rust-analyzer.completion.addSemicolonToUnit" = {
+    description = ''
+      Whether to automatically add a semicolon when completing unit-returning functions.
+
+      In `match` arms it completes a comma instead.
     '';
     pluginDefault = true;
     type = {
@@ -1702,7 +1740,7 @@
   };
   "rust-analyzer.references.excludeTests" = {
     description = ''
-      Exclude tests from find-all-references.
+      Exclude tests from find-all-references and call-hierarchy.
     '';
     pluginDefault = false;
     type = {

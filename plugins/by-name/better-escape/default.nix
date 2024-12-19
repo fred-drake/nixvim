@@ -4,10 +4,10 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "better-escape";
-  originalName = "better-escape.nvim";
-  luaName = "better_escape";
+  packPathName = "better-escape.nvim";
+  moduleName = "better_escape";
   package = "better-escape-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

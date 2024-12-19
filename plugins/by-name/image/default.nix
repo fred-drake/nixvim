@@ -12,7 +12,7 @@ in
 {
   meta.maintainers = [ maintainers.GaetanLepage ];
 
-  options.plugins.image = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.image = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "image.nvim";
 
     package = lib.mkPackageOption pkgs "image.nvim" {
@@ -26,7 +26,7 @@ in
       nullable = true;
     };
 
-    ueberzugPackage = lib.mkPackageOption pkgs "ueberzug" {
+    ueberzugPackage = lib.mkPackageOption pkgs "ueberzugpp" {
       nullable = true;
     };
 
@@ -166,7 +166,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require('image').setup(${helpers.toLuaObject setupOptions})
+        require('image').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

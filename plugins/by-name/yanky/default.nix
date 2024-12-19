@@ -6,9 +6,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "yanky";
-  originalName = "yanky.nvim";
+  packPathName = "yanky.nvim";
   package = "yanky-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
@@ -378,7 +378,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         local utils = require('yanky.utils')
         ${optionalString config.plugins.telescope.enable "local mapping = require('yanky.telescope.mapping')"}
 
-        require('yanky').setup(${helpers.toLuaObject cfg.settings})
+        require('yanky').setup(${lib.nixvim.toLuaObject cfg.settings})
       end
     '';
 

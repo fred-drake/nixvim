@@ -56,7 +56,7 @@ let
   };
 in
 {
-  options.plugins.dap.extensions.dap-ui = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.dap.extensions.dap-ui = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "dap-ui";
 
     package = lib.mkPackageOption pkgs "dap-ui" {
@@ -192,9 +192,7 @@ in
 
       maxTypeLength = helpers.mkNullOrOption types.int "Maximum number of characters to allow a type name to fill before trimming.";
 
-      maxValueLines =
-        helpers.defaultNullOpts.mkInt 100
-          "Maximum number of lines to allow a value to fill before trimming.";
+      maxValueLines = helpers.defaultNullOpts.mkInt 100 "Maximum number of lines to allow a value to fill before trimming.";
     };
 
     selectWindow = helpers.defaultNullOpts.mkLuaFn null ''
@@ -241,7 +239,7 @@ in
         enable = true;
 
         extensionConfigLua = ''
-          require("dapui").setup(${helpers.toLuaObject options});
+          require("dapui").setup(${lib.nixvim.toLuaObject options});
         '';
       };
     };

@@ -3,11 +3,11 @@
   helpers,
   ...
 }:
-with helpers.vim-plugin;
+with lib.nixvim.vim-plugin;
 with lib;
 mkVimPlugin {
   name = "goyo";
-  originalName = "goyo.vim";
+  packPathName = "goyo.vim";
   package = "goyo-vim";
   globalPrefix = "goyo_";
 
@@ -18,21 +18,10 @@ mkVimPlugin {
   optionsRenamedToSettings = [
     "width"
     "height"
-  ];
-  imports = [
-    (mkRenamedOptionModule
-      [
-        "plugins"
-        "goyo"
-        "showLineNumbers"
-      ]
-      [
-        "plugins"
-        "goyo"
-        "settings"
-        "linenr"
-      ]
-    )
+    {
+      old = "showLineNumbers";
+      new = "linenr";
+    }
   ];
 
   settingsOptions = {

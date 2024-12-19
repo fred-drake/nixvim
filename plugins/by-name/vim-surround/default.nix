@@ -3,9 +3,9 @@
   helpers,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "vim-surround";
-  originalName = "surround.vim";
+  packPathName = "surround.vim";
   package = "vim-surround";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

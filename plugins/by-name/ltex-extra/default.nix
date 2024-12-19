@@ -5,9 +5,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "ltex-extra";
-  originalName = "ltex_extra.nvim";
+  packPathName = "ltex_extra.nvim";
   package = "ltex_extra-nvim";
 
   maintainers = [ maintainers.loicreynier ];
@@ -55,7 +55,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         enable = true;
 
         onAttach.function = ''
-          require("ltex_extra").setup(${helpers.toLuaObject cfg.settings})
+          require("ltex_extra").setup(${lib.nixvim.toLuaObject cfg.settings})
         '';
       };
     };

@@ -5,9 +5,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "chatgpt";
-  originalName = "ChatGPT.nvim";
+  packPathName = "ChatGPT.nvim";
   package = "ChatGPT-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

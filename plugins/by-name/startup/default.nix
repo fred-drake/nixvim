@@ -12,7 +12,7 @@ in
 {
   meta.maintainers = [ maintainers.GaetanLepage ];
 
-  options.plugins.startup = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.startup = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "startup.nvim";
 
     package = lib.mkPackageOption pkgs "startup.nvim" {
@@ -334,10 +334,10 @@ in
         } // sections;
       in
       ''
-        require('startup').setup(${helpers.toLuaObject setupOptions})
+        require('startup').setup(${lib.nixvim.toLuaObject setupOptions})
       ''
       + (optionalString (
         cfg.userMappings != { }
-      ) "require('startup').create_mappings(${helpers.toLuaObject cfg.userMappings})");
+      ) "require('startup').create_mappings(${lib.nixvim.toLuaObject cfg.userMappings})");
   };
 }

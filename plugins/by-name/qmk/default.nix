@@ -4,9 +4,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "qmk";
-  originalName = "qmk.nvim";
+  packPathName = "qmk.nvim";
   package = "qmk-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

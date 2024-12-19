@@ -7,7 +7,7 @@
 }:
 with lib;
 {
-  options.plugins.ts-context-commentstring = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.ts-context-commentstring = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-ts-context-commentstring";
 
     package = lib.mkPackageOption pkgs "ts-context-commentstring" {
@@ -58,7 +58,7 @@ with lib;
           setupOptions = with cfg; { inherit languages; } // cfg.extraOptions;
         in
         ''
-          require('ts_context_commentstring').setup(${helpers.toLuaObject setupOptions})
+          require('ts_context_commentstring').setup(${lib.nixvim.toLuaObject setupOptions})
         '';
     };
 }

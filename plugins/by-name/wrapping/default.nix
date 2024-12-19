@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "wrapping";
-  originalName = "wrapping.nvim";
+  packPathName = "wrapping.nvim";
   package = "wrapping-nvim";
 
   maintainers = [ lib.maintainers.ZainKergaye ];
@@ -50,9 +50,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       "typst"
     ] "Filetypes for automatic heuristic mode triggers.";
 
-    auto_set_mode_filetype_denylist =
-      defaultNullOpts.mkListOf lib.types.str [ ]
-        "Auto set mode filetype deny list";
+    auto_set_mode_filetype_denylist = defaultNullOpts.mkListOf lib.types.str [
+    ] "Auto set mode filetype deny list";
 
     auto_set_mode_heuristically = defaultNullOpts.mkBool true ''
       If true, the plugin will set the hard or soft mode automatically when any file loads.

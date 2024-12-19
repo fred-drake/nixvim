@@ -4,9 +4,9 @@
   pkgs,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "fugitive";
-  originalName = "vim-fugitive";
+  packPathName = "vim-fugitive";
   package = "vim-fugitive";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

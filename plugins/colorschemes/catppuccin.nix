@@ -8,6 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "catppuccin";
+  packPathName = "catppuccin-nvim";
   isColorscheme = true;
   package = "catppuccin-nvim";
 
@@ -88,31 +89,27 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     "colorOverrides"
     "customHighlights"
     "integrations"
+    {
+      old = "showBufferEnd";
+      new = "show_end_of_buffer";
+    }
+    {
+      old = "terminalColors";
+      new = "term_colors";
+    }
+    {
+      old = "disableItalic";
+      new = "no_italic";
+    }
+    {
+      old = "disableBold";
+      new = "no_bold";
+    }
+    {
+      old = "disableUnderline";
+      new = "no_underline";
+    }
   ];
-  imports =
-    lib.mapAttrsToList
-      (
-        old: new:
-        lib.mkRenamedOptionModule
-          [
-            "colorschemes"
-            "catppuccin"
-            old
-          ]
-          [
-            "colorschemes"
-            "catppuccin"
-            "settings"
-            new
-          ]
-      )
-      {
-        showBufferEnd = "show_end_of_buffer";
-        terminalColors = "term_colors";
-        disableItalic = "no_italic";
-        disableBold = "no_bold";
-        disableUnderline = "no_underline";
-      };
 
   settingsOptions =
     let
@@ -316,5 +313,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     };
   };
 
-  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
+  extraConfig = {
+    opts.termguicolors = lib.mkDefault true;
+  };
 }

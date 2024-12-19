@@ -3,9 +3,9 @@
   helpers,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "zellij";
-  originalName = "zellij.nvim";
+  packPathName = "zellij.nvim";
   package = "zellij-nvim";
 
   maintainers = [ lib.maintainers.hmajid2301 ];

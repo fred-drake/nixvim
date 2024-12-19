@@ -8,7 +8,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "tokyonight";
   isColorscheme = true;
-  originalName = "tokyonight.nvim";
+  packPathName = "tokyonight.nvim";
   package = "tokyonight-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
@@ -177,5 +177,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     on_highlights = "function(highlights, colors) end";
   };
 
-  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
+  extraConfig = {
+    opts.termguicolors = lib.mkDefault true;
+  };
 }

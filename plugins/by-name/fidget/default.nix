@@ -142,7 +142,7 @@ in
       ];
 
   options = {
-    plugins.fidget = helpers.neovim-plugin.extraOptionsOptions // {
+    plugins.fidget = lib.nixvim.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "fidget-nvim";
 
       package = lib.mkPackageOption pkgs "fidget-nvim" {
@@ -677,7 +677,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require("fidget").setup${helpers.toLuaObject setupOptions}
+        require("fidget").setup${lib.nixvim.toLuaObject setupOptions}
       '';
   };
 }

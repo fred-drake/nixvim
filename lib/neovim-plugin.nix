@@ -27,11 +27,11 @@
       colorscheme ? name,
       # luaConfig
       configLocation ? if isColorscheme then "extraConfigLuaPre" else "extraConfigLua",
-      # For some plugins it may not make sense to have a configuration attribute, as they are
-      # configured through some other mean, like global variables
-      hasConfigAttrs ? true,
+      # Some plugin are not supposed to generate lua configuration code.
+      # For example, they might just be configured through some other mean, like global variables
+      hasLuaConfig ? true,
       # options
-      originalName ? name,
+      packPathName ? name,
       # Can be a string, a list of strings, or a module option:
       # - A string will be intrpreted as `pkgs.vimPlugins.${package}`
       # - A list will be interpreted as a "pkgs path", e.g. `pkgs.${elem1}.${elem2}.${etc...}`
@@ -40,20 +40,23 @@
       package ? name,
       settingsOptions ? { },
       settingsExample ? null,
-      settingsDescription ? "Options provided to the `require('${luaName}')${setup}` function.",
+      settingsDescription ? "Options provided to the `require('${moduleName}')${setup}` function.",
       hasSettings ? true,
       extraOptions ? { },
       # config
-      luaName ? name,
+      moduleName ? name,
       setup ? ".setup",
       extraConfig ? cfg: { },
       extraPlugins ? [ ],
       extraPackages ? [ ],
       callSetup ? true,
-      installPackage ? true,
     }@args:
     let
       namespace = if isColorscheme then "colorschemes" else "plugins";
+      loc = [
+        namespace
+        name
+      ];
 
       module =
         {
@@ -63,38 +66,36 @@
           ...
         }:
         let
-          cfg = config.${namespace}.${name};
-          opt = options.${namespace}.${name};
+          cfg = lib.getAttrFromPath loc config;
+          opts = lib.getAttrFromPath loc options;
 
           setupCode = ''
-            require('${luaName}')${setup}(${
+            require('${moduleName}')${setup}(${
               lib.optionalString (cfg ? settings) (lib.nixvim.toLuaObject cfg.settings)
             })
           '';
 
-          setLuaConfig = lib.setAttrByPath (lib.toList configLocation);
+          luaConfigAtLocation = lib.nixvim.modules.mkConfigAt configLocation cfg.luaConfig.content;
         in
         {
           meta = {
             inherit maintainers;
             nixvimInfo = {
               inherit description;
-              url = args.url or opt.package.default.meta.homepage;
-              path = [
-                namespace
-                name
-              ];
+              url = args.url or opts.package.default.meta.homepage;
+              path = loc;
             };
           };
 
-          options.${namespace}.${name} =
+          options = lib.setAttrByPath loc (
             {
-              enable = lib.mkEnableOption originalName;
+              enable = lib.mkEnableOption packPathName;
+              lazyLoad = lib.nixvim.mkLazyLoadOption packPathName;
               package =
                 if lib.isOption package then
                   package
                 else
-                  lib.mkPackageOption pkgs originalName {
+                  lib.mkPackageOption pkgs packPathName {
                     default =
                       if builtins.isList package then
                         package
@@ -104,6 +105,16 @@
                           package
                         ];
                   };
+              packageDecorator = lib.mkOption {
+                type = lib.types.functionTo lib.types.package;
+                default = lib.id;
+                defaultText = lib.literalExpression "x: x";
+                description = ''
+                  Additional transformations to apply to the final installed package.
+                  The result of these transformations is **not** visible in the `package` option's value.
+                '';
+                internal = true;
+              };
             }
             // lib.optionalAttrs hasSettings {
               settings = lib.nixvim.mkSettingsOption {
@@ -112,38 +123,81 @@
                 example = settingsExample;
               };
             }
-            // lib.optionalAttrs hasConfigAttrs {
+            // lib.optionalAttrs hasLuaConfig {
               luaConfig = lib.mkOption {
                 type = lib.types.pluginLuaConfig;
                 default = { };
                 description = "The plugin's lua configuration";
               };
             }
-            // extraOptions;
+            // extraOptions
+          );
 
           config =
             assert lib.assertMsg (
-              callSetup -> configLocation != null
-            ) "When a plugin has no config attrs and has a setup function it must have a config location";
+              callSetup -> hasLuaConfig
+            ) "This plugin is supposed to call the `setup()` function but has `hasLuaConfig` set to false";
             lib.mkIf cfg.enable (
               lib.mkMerge (
                 [
                   {
-                    extraPlugins = (lib.optional installPackage cfg.package) ++ extraPlugins;
                     inherit extraPackages;
+                    extraPlugins = extraPlugins ++ [
+                      (cfg.packageDecorator cfg.package)
+                    ];
                   }
-                  (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
+
+                  (lib.optionalAttrs (isColorscheme && colorscheme != null) {
                     colorscheme = lib.mkDefault colorscheme;
                   })
-                  (extraConfig cfg)
+
+                  # Apply any additional configuration added to `extraConfig`
+                  (lib.optionalAttrs (args ? extraConfig) (
+                    lib.nixvim.modules.applyExtraConfig {
+                      inherit extraConfig cfg opts;
+                    }
+                  ))
                 ]
-                ++ (lib.optionals (!hasConfigAttrs) [
-                  (lib.optionalAttrs callSetup (setLuaConfig setupCode))
-                ])
-                ++ (lib.optionals hasConfigAttrs [
-                  (lib.optionalAttrs callSetup { ${namespace}.${name}.luaConfig.content = setupCode; })
-                  (lib.optionalAttrs (configLocation != null) (setLuaConfig cfg.luaConfig.content))
-                ])
+                # Lua configuration code generation
+                ++ lib.optionals hasLuaConfig [
+
+                  # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
+                  (lib.optionalAttrs callSetup (lib.setAttrByPath loc { luaConfig.content = setupCode; }))
+
+                  # When NOT lazy loading, write `luaConfig.content` to `configLocation`
+                  (lib.mkIf (!cfg.lazyLoad.enable) luaConfigAtLocation)
+
+                  # When lazy loading is enabled for this plugin, route its configuration to the enabled provider
+                  (lib.mkIf cfg.lazyLoad.enable {
+                    assertions = [
+                      {
+                        assertion = (isColorscheme && colorscheme != null) || cfg.lazyLoad.settings != { };
+                        message = "You have enabled lazy loading for ${packPathName} but have not provided any configuration.";
+                      }
+                    ];
+                    plugins.lz-n = {
+                      plugins = [
+                        (
+                          {
+                            __unkeyed-1 = packPathName;
+                            # Use provided after, otherwise fallback to normal function wrapped lua content
+                            after =
+                              let
+                                after = cfg.lazyLoad.settings.after or null;
+                                default = "function()\n " + cfg.luaConfig.content + " \nend";
+                              in
+                              if (lib.isString after || lib.types.rawLua.check after) then after else default;
+                            colorscheme = lib.mkIf isColorscheme (cfg.lazyLoad.settings.colorscheme or colorscheme);
+                          }
+                          // lib.removeAttrs cfg.lazyLoad.settings [
+                            "after"
+                            "colorscheme"
+                          ]
+                        )
+                      ];
+                    };
+                  })
+                ]
               )
             );
         };
@@ -151,17 +205,13 @@
     {
       imports =
         let
-          basePluginPath = [
-            namespace
-            name
-          ];
-          settingsPath = basePluginPath ++ [ "settings" ];
+          settingsPath = loc ++ [ "settings" ];
         in
         imports
         ++ [ module ]
-        ++ (lib.optional deprecateExtraOptions (
-          lib.mkRenamedOptionModule (basePluginPath ++ [ "extraOptions" ]) settingsPath
-        ))
-        ++ (lib.nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
+        ++ lib.optional deprecateExtraOptions (
+          lib.mkRenamedOptionModule (loc ++ [ "extraOptions" ]) settingsPath
+        )
+        ++ lib.nixvim.mkSettingsRenamedOptionModules loc settingsPath optionsRenamedToSettings;
     };
 }

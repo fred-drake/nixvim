@@ -4,10 +4,10 @@
   ...
 }:
 with lib;
-with helpers.vim-plugin;
+with lib.nixvim.vim-plugin;
 mkVimPlugin {
   name = "instant";
-  originalName = "instant.nvim";
+  packPathName = "instant.nvim";
   package = "instant-nvim";
   globalPrefix = "instant_";
 

@@ -5,9 +5,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "obsidian";
-  originalName = "obsidian.nvim";
+  packPathName = "obsidian.nvim";
   package = "obsidian-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
@@ -116,6 +116,22 @@ helpers.neovim-plugin.mkNeovimPlugin {
       "imgTextFunc"
     ]
     "yamlParser"
+    {
+      old = "finder";
+      new = [
+        "settings"
+        "picker"
+        "name"
+      ];
+    }
+    # https://github.com/epwalsh/obsidian.nvim/blob/656d9c2c64528839db8b2d9a091843b3c90155a2/CHANGELOG.md?plain=1#L184
+    {
+      old = [
+        "completion"
+        "newNotesLocation"
+      ];
+      new = "new_notes_location";
+    }
   ];
   imports =
     let
@@ -130,32 +146,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
         mkRemovedOptionModule (
           basePluginPath ++ [ "workspaces" ]
         ) "Please use `plugins.obsidian.settings.workspaces` instead."
-      )
-      (mkRenamedOptionModule (basePluginPath ++ [ "finder" ]) (
-        basePluginPath
-        ++ [
-          "settings"
-          "picker"
-          "name"
-        ]
-      ))
-      (
-        # https://github.com/epwalsh/obsidian.nvim/blob/656d9c2c64528839db8b2d9a091843b3c90155a2/CHANGELOG.md?plain=1#L184
-        mkRenamedOptionModule
-          (
-            basePluginPath
-            ++ [
-              "completion"
-              "newNotesLocation"
-            ]
-          )
-          (
-            basePluginPath
-            ++ [
-              "settings"
-              "new_notes_location"
-            ]
-          )
       )
       (
         # We have to remove the option here because the user could set old-style camelCase options in each checkbox element.
@@ -220,7 +210,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
                   path = mkOption {
                     type = with lib.types; maybeRaw str;
-                    description = "The of the workspace.";
+                    description = "The path of the workspace.";
                   };
 
                   overrides = opts;

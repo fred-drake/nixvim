@@ -4,9 +4,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "statuscol";
-  originalName = "statuscol.nvim";
+  packPathName = "statuscol.nvim";
   package = "statuscol-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
