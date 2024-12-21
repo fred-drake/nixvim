@@ -10,7 +10,7 @@ let
   cfg = config.plugins.leap;
 in
 {
-  options.plugins.leap = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.leap = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "leap.nvim";
 
     package = lib.mkPackageOption pkgs "leap.nvim" {
@@ -183,7 +183,7 @@ in
         + (optionalString (options != { }) ''
           require('leap').opts = vim.tbl_deep_extend(
             "keep",
-            ${helpers.toLuaObject options},
+            ${lib.nixvim.toLuaObject options},
             require('leap').opts
           )
         '');

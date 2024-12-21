@@ -60,7 +60,7 @@ in
 {
   meta.maintainers = [ maintainers.GaetanLepage ];
 
-  options.plugins.ollama = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.ollama = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "ollama.nvim";
 
     package = lib.mkPackageOption pkgs "ollama.nvim" {
@@ -226,7 +226,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require('ollama').setup(${helpers.toLuaObject setupOptions})
+        require('ollama').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

@@ -10,7 +10,7 @@ let
   cfg = config.plugins.cursorline;
 in
 {
-  options.plugins.cursorline = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.cursorline = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-cursorline";
 
     package = lib.mkPackageOption pkgs "nvim-cursorline" {
@@ -55,7 +55,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require('nvim-cursorline').setup(${helpers.toLuaObject options})
+        require('nvim-cursorline').setup(${lib.nixvim.toLuaObject options})
       '';
     };
 }

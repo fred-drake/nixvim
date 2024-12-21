@@ -10,7 +10,7 @@ let
   cfg = config.plugins.notify;
 in
 {
-  options.plugins.notify = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.notify = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-notify";
 
     package = lib.mkPackageOption pkgs "nvim-notify" {
@@ -125,7 +125,7 @@ in
 
       extraConfigLua = ''
         vim.notify = require('notify');
-        require('notify').setup(${helpers.toLuaObject setupOptions})
+        require('notify').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

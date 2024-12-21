@@ -4,9 +4,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "toggleterm";
-  originalName = "toggleterm.nvim";
+  packPathName = "toggleterm.nvim";
   package = "toggleterm-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

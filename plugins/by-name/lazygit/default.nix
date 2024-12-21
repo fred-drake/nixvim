@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.vim-plugin.mkVimPlugin {
   name = "lazygit";
-  originalName = "lazygit.nvim";
+  packPathName = "lazygit.nvim";
   package = "lazygit-nvim";
   globalPrefix = "lazygit_";
 
@@ -47,9 +47,8 @@ lib.nixvim.vim-plugin.mkVimPlugin {
       Config file path is evaluated if this value is `1`.
     '';
 
-    config_file_path = defaultNullOpts.mkNullable (
-      with types; either str (listOf str)
-    ) [ ] "Custom config file path or list of custom config file paths.";
+    config_file_path = defaultNullOpts.mkNullable (with types; either str (listOf str)) [
+    ] "Custom config file path or list of custom config file paths.";
   };
 
   settingsExample = {

@@ -4,9 +4,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "debugprint";
-  originalName = "debugprint.nvim";
+  packPathName = "debugprint.nvim";
   package = "debugprint-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

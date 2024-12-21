@@ -4,36 +4,45 @@
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.plugins.lsp.servers.rust_analyzer;
+  inherit (lib) mkPackageOption types;
+  inherit (lib.nixvim) mkNullOrOption';
+
 in
 {
   options.plugins.lsp.servers.rust_analyzer = {
     # https://github.com/nix-community/nixvim/issues/674
-    installCargo = mkOption {
-      type = with types; nullOr bool;
-      default = null;
+    installCargo = mkNullOrOption' {
+      type = types.bool;
       example = true;
       description = "Whether to install `cargo`.";
     };
 
     # TODO: make nullable?
-    cargoPackage = mkPackageOption pkgs "cargo" { };
+    cargoPackage = lib.mkPackageOption pkgs "cargo" { };
 
-    installRustc = mkOption {
-      type = with types; nullOr bool;
-      default = null;
+    installRustc = mkNullOrOption' {
+      type = types.bool;
       example = true;
       description = "Whether to install `rustc`.";
     };
 
     # TODO: make nullable
     rustcPackage = mkPackageOption pkgs "rustc" { };
+
+    installRustfmt = mkNullOrOption' {
+      type = types.bool;
+      example = true;
+      description = "Whether to install `rustfmt`.";
+    };
+
+    # TODO: make nullable
+    rustfmtPackage = mkPackageOption pkgs "rustfmt" { };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     warnings =
-      (optional (cfg.installCargo == null) ''
+      (lib.optional (cfg.installCargo == null) ''
         `rust_analyzer` relies on `cargo`.
         - Set `plugins.lsp.servers.rust_analyzer.installCargo = true` to install it automatically
           with Nixvim.
@@ -43,7 +52,7 @@ in
           through Nixvim.
           By doing so, you will dismiss this warning.
       '')
-      ++ (optional (cfg.installRustc == null) ''
+      ++ (lib.optional (cfg.installRustc == null) ''
         `rust_analyzer` relies on `rustc`.
         - Set `plugins.lsp.servers.rust_analyzer.installRustc = true` to install it automatically
           with Nixvim.
@@ -55,8 +64,11 @@ in
       '');
 
     extraPackages =
-      with pkgs;
-      (optional ((isBool cfg.installCargo) && cfg.installCargo) cfg.cargoPackage)
-      ++ (optional ((isBool cfg.installRustc) && cfg.installRustc) cfg.rustcPackage);
+      let
+        isEnabled = x: lib.isBool x && x;
+      in
+      lib.optional (isEnabled cfg.installCargo) cfg.cargoPackage
+      ++ lib.optional (isEnabled cfg.installRustc) cfg.rustcPackage
+      ++ lib.optional (isEnabled cfg.installRustfmt) cfg.rustfmtPackage;
   };
 }

@@ -4,9 +4,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "oil";
-  originalName = "oil.nvim";
+  packPathName = "oil.nvim";
   package = "oil-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
@@ -164,6 +164,13 @@ helpers.neovim-plugin.mkNeovimPlugin {
       "progress"
       "minimizedBorder"
     ]
+    {
+      old = "lspRenameAutosave";
+      new = [
+        "lsp_file_method"
+        "autosave_changes"
+      ];
+    }
   ];
   imports =
     let
@@ -171,19 +178,11 @@ helpers.neovim-plugin.mkNeovimPlugin {
         "plugins"
         "oil"
       ];
-      settingsPath = basePluginPath ++ [ "settings" ];
     in
     [
       (mkRemovedOptionModule (
         basePluginPath ++ [ "columns" ]
       ) "Use `plugins.oil.settings.columns` instead but beware, the format has changed.")
-      (mkRenamedOptionModule (basePluginPath ++ [ "lspRenameAutosave" ]) (
-        settingsPath
-        ++ [
-          "lsp_file_method"
-          "autosave_changes"
-        ]
-      ))
       (mkRemovedOptionModule (
         basePluginPath ++ [ "trashCommand" ]
       ) "This option has been deprecated by upstream.")

@@ -4,11 +4,11 @@
   ...
 }:
 with lib;
-with helpers.vim-plugin;
+with lib.nixvim.vim-plugin;
 mkVimPlugin {
   name = "magma-nvim";
-  originalName = "magma-nvim";
-  package = "magma-nvim-goose";
+  packPathName = "magma-nvim";
+  package = "magma-nvim";
   globalPrefix = "magma_";
 
   maintainers = [ maintainers.GaetanLepage ];

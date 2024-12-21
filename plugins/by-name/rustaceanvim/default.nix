@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "rustaceanvim";
 
   maintainers = [ maintainers.GaetanLepage ];
@@ -48,8 +48,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   };
 
   callSetup = false;
-  hasConfigAttrs = false;
-  configLocation = null;
+  hasLuaConfig = false;
   extraConfig =
     cfg:
     mkMerge [

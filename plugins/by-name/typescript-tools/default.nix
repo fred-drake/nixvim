@@ -7,7 +7,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "typescript-tools";
-  originalName = "typescript-tools.nvim";
+  packPathName = "typescript-tools.nvim";
   package = "typescript-tools-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
@@ -221,6 +221,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       ];
     in
     {
+      # TODO: handle lazy loading properly
       plugins.lsp.postConfig =
         let
           # TODO:: introduced 10-22-2024: remove after 24.11

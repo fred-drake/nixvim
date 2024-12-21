@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "auto-save";
-  originalName = "auto-save.nvim";
+  packPathName = "auto-save.nvim";
   package = "auto-save-nvim";
 
   maintainers = [ lib.maintainers.braindefender ];
@@ -28,26 +28,21 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     "triggerEvents"
     "writeAllBuffers"
     "debounceDelay"
+    {
+      old = "enableAutoSave";
+      new = "enabled";
+    }
   ];
 
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "auto-save"
-      ];
-      settingsPath = basePluginPath ++ [ "settings" ];
-    in
-    [
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "enableAutoSave" ]) (settingsPath ++ [ "enabled" ]))
-      (lib.mkRemovedOptionModule (basePluginPath ++ [ "keymaps" ]) ''
-        Use the top-level `keymaps` option to create a keymap that runs :ASToggle
+  imports = [
+    (lib.mkRemovedOptionModule [ "plugins" "auto-save" "keymaps" ] ''
+      Use the top-level `keymaps` option to create a keymap that runs :ASToggle
 
-        keymaps = [
-          { key = "<leader>s"; action = "<cmd>ASToggle<CR>"; }
-        ];
-      '')
-    ];
+      keymaps = [
+        { key = "<leader>s"; action = "<cmd>ASToggle<CR>"; }
+      ];
+    '')
+  ];
 
   settingsOptions = {
     enabled = defaultNullOpts.mkBool true ''

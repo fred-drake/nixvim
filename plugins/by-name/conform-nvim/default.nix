@@ -4,12 +4,12 @@
 }:
 let
   inherit (lib) types;
-  inherit (lib.nixvim) defaultNullOpts mkRaw;
+  inherit (lib.nixvim) defaultNullOpts;
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "conform-nvim";
-  luaName = "conform";
-  originalName = "conform.nvim";
+  moduleName = "conform";
+  packPathName = "conform.nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

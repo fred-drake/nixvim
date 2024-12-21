@@ -83,7 +83,7 @@ in
 {
   options.plugins.diffview =
     with helpers.defaultNullOpts;
-    helpers.neovim-plugin.extraOptionsOptions
+    lib.nixvim.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "diffview";
 
@@ -835,7 +835,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("diffview").setup(${helpers.toLuaObject setupOptions})
+        require("diffview").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

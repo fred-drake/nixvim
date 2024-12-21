@@ -5,9 +5,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "treesitter-context";
-  originalName = "nvim-treesitter-context";
+  packPathName = "nvim-treesitter-context";
   package = "nvim-treesitter-context";
 
   maintainers = [ maintainers.GaetanLepage ];
@@ -96,7 +96,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     zindex = 20;
   };
 
-  extraConfig = cfg: {
+  extraConfig = {
     warnings = mkIf (!config.plugins.treesitter.enable) [
       "Nixvim: treesitter-context needs treesitter to function as intended"
     ];

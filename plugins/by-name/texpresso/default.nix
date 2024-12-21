@@ -7,9 +7,9 @@
 with lib;
 # This plugin has no configuration, so we use `mkVimPlugin` without the `globalPrefix` argument to
 # avoid the creation of the `settings` option.
-helpers.vim-plugin.mkVimPlugin {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "texpresso";
-  originalName = "texpresso.vim";
+  packPathName = "texpresso.vim";
   package = "texpresso-vim";
 
   maintainers = [ maintainers.nickhu ];

@@ -8,8 +8,11 @@ default_pkgs: self:
   module,
 }:
 let
-  # NOTE: user-facing so we must include the legacy `pkgs` argument
-  helpers = import ../lib { inherit pkgs lib _nixvimTests; };
+  # NOTE: we are importing this just for evalNixvim
+  helpers = import ../lib {
+    inherit lib _nixvimTests;
+    flake = self;
+  };
 
   inherit (helpers.modules) evalNixvim;
 

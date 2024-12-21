@@ -4,10 +4,10 @@
   ...
 }:
 with lib;
-with helpers.vim-plugin;
+with lib.nixvim.vim-plugin;
 mkVimPlugin {
   name = "molten";
-  originalName = "molten-nvim";
+  packPathName = "molten-nvim";
   package = "molten-nvim";
   globalPrefix = "molten_";
 

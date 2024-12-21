@@ -4,9 +4,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "trim";
-  originalName = "trim.nvim";
+  packPathName = "trim.nvim";
   package = "trim-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

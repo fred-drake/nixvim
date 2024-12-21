@@ -1,14 +1,14 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
 with lib;
 let
   inherit (lib.nixvim) defaultNullOpts;
+  mkExtension = import ./_mk-extension.nix;
 in
-(import ./_helpers.nix { inherit lib config pkgs; }).mkExtension {
+mkExtension {
   name = "media-files";
   extensionName = "media_files";
   package = "telescope-media-files-nvim";
@@ -21,30 +21,27 @@ in
         "telescope"
         "extensions"
       ];
+      oldPath = telescopeExtensionsPath ++ [ "media_files" ];
+      newPath = telescopeExtensionsPath ++ [ "media-files" ];
     in
-    mapAttrsToList
-      (
-        oldOptionName: newOptionPath:
-        mkRenamedOptionModule (
-          telescopeExtensionsPath
-          ++ [
-            "media_files"
-            oldOptionName
-          ]
-        ) (telescopeExtensionsPath ++ [ "media-files" ] ++ newOptionPath)
-      )
+    lib.nixvim.mkSettingsRenamedOptionModules oldPath newPath [
+      "enable"
+      "package"
       {
-        enable = [ "enable" ];
-        package = [ "package" ];
-        filetypes = [
+        old = "filetypes";
+        new = [
           "settings"
           "filetypes"
         ];
-        find_cmd = [
+      }
+      {
+        old = "find_cmd";
+        new = [
           "settings"
           "find_cmd"
         ];
-      };
+      }
+    ];
 
   extraOptions = {
     dependencies =

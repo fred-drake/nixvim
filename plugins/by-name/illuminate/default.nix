@@ -83,7 +83,7 @@ in
   options.plugins.illuminate =
     with helpers;
     with defaultNullOpts;
-    helpers.neovim-plugin.extraOptionsOptions
+    lib.nixvim.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "vim-illuminate";
 
@@ -150,7 +150,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("illuminate").configure(${helpers.toLuaObject setupOptions})
+        require("illuminate").configure(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

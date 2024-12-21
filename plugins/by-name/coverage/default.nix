@@ -60,7 +60,7 @@ let
   };
 in
 {
-  options.plugins.coverage = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.coverage = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-coverage";
 
     package = lib.mkPackageOption pkgs "nvim-coverage" {
@@ -183,13 +183,13 @@ in
     '';
 
     summary = {
-      widthPercentage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
-        1.0
-      ) 0.7 "Width of the pop-up window.";
+      widthPercentage =
+        helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.7
+          "Width of the pop-up window.";
 
-      heightPercentage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
-        1.0
-      ) 0.5 "Height of the pop-up window.";
+      heightPercentage =
+        helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5
+          "Height of the pop-up window.";
 
       borders = mapAttrs (optionName: default: helpers.defaultNullOpts.mkStr default "") {
         topleft = "╭";
@@ -267,7 +267,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("coverage").setup(${helpers.toLuaObject setupOptions})
+        require("coverage").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
 
       keymaps = flatten (

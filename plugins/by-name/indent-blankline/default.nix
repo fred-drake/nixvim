@@ -4,10 +4,10 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "indent-blankline";
-  originalName = "indent-blankline.nvim";
-  luaName = "ibl";
+  packPathName = "indent-blankline.nvim";
+  moduleName = "ibl";
   package = "indent-blankline-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

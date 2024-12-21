@@ -40,7 +40,7 @@ let
 in
 {
   options = {
-    plugins.wtf = helpers.neovim-plugin.extraOptionsOptions // {
+    plugins.wtf = lib.nixvim.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "wtf.nvim";
 
       package = lib.mkPackageOption pkgs "wtf.nvim" {
@@ -135,7 +135,7 @@ in
       keymaps = filter (keymap: keymap != null) (attrValues cfg.keymaps);
 
       extraConfigLua = ''
-        require("wtf").setup(${helpers.toLuaObject setupOptions})
+        require("wtf").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

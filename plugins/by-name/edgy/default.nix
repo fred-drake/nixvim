@@ -4,14 +4,14 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "edgy";
-  originalName = "edgy.nvim";
+  packPathName = "edgy.nvim";
   package = "edgy-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  extraConfig = cfg: {
+  extraConfig = {
     # Those options are strongly recommended by the plugin author:
     # https://github.com/folke/edgy.nvim?tab=readme-ov-file#-installation
     opts = {

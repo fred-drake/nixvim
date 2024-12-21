@@ -7,7 +7,7 @@
 }:
 with lib;
 {
-  options.plugins.gitlinker = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.gitlinker = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "gitlinker.nvim";
 
     package = lib.mkPackageOption pkgs "gitlinker.nvim" {
@@ -103,7 +103,7 @@ with lib;
             // cfg.extraOptions;
         in
         ''
-          require('gitlinker').setup(${helpers.toLuaObject setupOptions})
+          require('gitlinker').setup(${lib.nixvim.toLuaObject setupOptions})
         '';
     };
 }

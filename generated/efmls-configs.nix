@@ -469,6 +469,28 @@
       ];
     };
   };
+  gleam = {
+    formatter = {
+      lang = "gleam";
+      possible = [
+        "gleam_format"
+      ];
+    };
+    linter = {
+      lang = "gleam";
+      possible = [
+        "alex"
+        "codespell"
+        "cspell"
+        "languagetool"
+        "proselint"
+        "redpen"
+        "textlint"
+        "vale"
+        "write_good"
+      ];
+    };
+  };
   go = {
     formatter = {
       lang = "go";
@@ -670,6 +692,28 @@
     };
     linter = {
       lang = "jsonc";
+      possible = [
+        "alex"
+        "codespell"
+        "cspell"
+        "languagetool"
+        "proselint"
+        "redpen"
+        "textlint"
+        "vale"
+        "write_good"
+      ];
+    };
+  };
+  kdl = {
+    formatter = {
+      lang = "kdl";
+      possible = [
+        "kdlfmt"
+      ];
+    };
+    linter = {
+      lang = "kdl";
       possible = [
         "alex"
         "codespell"

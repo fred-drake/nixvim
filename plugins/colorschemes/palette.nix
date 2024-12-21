@@ -9,7 +9,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "palette";
   isColorscheme = true;
-  originalName = "palette.nvim";
+  packPathName = "palette.nvim";
   package = "palette-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
@@ -47,7 +47,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       '';
     };
 
-    customPalettes =
+    custom_palettes =
       lib.mapAttrs
         (
           name: colorNames:

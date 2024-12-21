@@ -81,7 +81,7 @@
     extraConfigLua = lib.mkIf (config.keymaps != [ ]) ''
       -- Set up keybinds {{{
       do
-        local __nixvim_binds = ${helpers.toLuaObject (map helpers.keymaps.removeDeprecatedMapAttrs config.keymaps)}
+        local __nixvim_binds = ${lib.nixvim.toLuaObject (map helpers.keymaps.removeDeprecatedMapAttrs config.keymaps)}
         for i, map in ipairs(__nixvim_binds) do
           vim.keymap.set(map.mode, map.key, map.action, map.options)
         end
@@ -97,11 +97,13 @@
       inherit event;
       group = "nixvim_binds_${event}";
       callback = helpers.mkRaw ''
-        function()
+        function(args)
           do
-            local __nixvim_binds = ${helpers.toLuaObject (map helpers.keymaps.removeDeprecatedMapAttrs mappings)}
+            local __nixvim_binds = ${lib.nixvim.toLuaObject (map helpers.keymaps.removeDeprecatedMapAttrs mappings)}
+
             for i, map in ipairs(__nixvim_binds) do
-              vim.keymap.set(map.mode, map.key, map.action, map.options)
+              local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
+              vim.keymap.set(map.mode, map.key, map.action, options)
             end
           end
         end

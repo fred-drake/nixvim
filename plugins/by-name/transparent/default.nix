@@ -4,9 +4,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "transparent";
-  originalName = "transparent.nvim";
+  packPathName = "transparent.nvim";
   package = "transparent-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

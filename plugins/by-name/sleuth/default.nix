@@ -3,9 +3,9 @@
   helpers,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "sleuth";
-  originalName = "vim-sleuth";
+  packPathName = "vim-sleuth";
   package = "vim-sleuth";
   globalPrefix = "sleuth_";
 

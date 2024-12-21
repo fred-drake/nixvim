@@ -11,7 +11,7 @@ let
 in
 {
   options = {
-    plugins.presence-nvim = helpers.neovim-plugin.extraOptionsOptions // {
+    plugins.presence-nvim = lib.nixvim.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "presence-nvim";
       package = lib.mkPackageOption pkgs "presence-nvim" {
         default = [
@@ -212,7 +212,7 @@ in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
       extraConfigLua = ''
-        require("presence").setup${helpers.toLuaObject setupOptions}
+        require("presence").setup${lib.nixvim.toLuaObject setupOptions}
       '';
     };
 }

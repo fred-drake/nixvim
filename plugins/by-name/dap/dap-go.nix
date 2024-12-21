@@ -29,9 +29,7 @@ in
     delve = {
       path = helpers.defaultNullOpts.mkStr "dlv" "The path to the executable dlv which will be used for debugging.";
 
-      initializeTimeoutSec =
-        helpers.defaultNullOpts.mkInt 20
-          "Time to wait for delve to initialize the debug session.";
+      initializeTimeoutSec = helpers.defaultNullOpts.mkInt 20 "Time to wait for delve to initialize the debug session.";
 
       port = helpers.defaultNullOpts.mkStr "$\{port}" ''
         A string that defines the port to start delve debugger.
@@ -63,7 +61,7 @@ in
       plugins.dap = {
         enable = true;
         extensionConfigLua = ''
-          require("dap-go").setup(${helpers.toLuaObject options})
+          require("dap-go").setup(${lib.nixvim.toLuaObject options})
         '';
       };
     };

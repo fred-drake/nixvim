@@ -10,7 +10,7 @@ let
   cfg = config.plugins.nvim-bqf;
 in
 {
-  options.plugins.nvim-bqf = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.nvim-bqf = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-bqf";
 
     package = lib.mkPackageOption pkgs "nvim-bqf" {
@@ -164,7 +164,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require('bqf').setup(${helpers.toLuaObject options})
+        require('bqf').setup(${lib.nixvim.toLuaObject options})
       '';
     };
 }

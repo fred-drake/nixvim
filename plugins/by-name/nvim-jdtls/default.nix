@@ -10,7 +10,7 @@ let
   cfg = config.plugins.nvim-jdtls;
 in
 {
-  options.plugins.nvim-jdtls = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.nvim-jdtls = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-jdtls";
 
     package = lib.mkPackageOption pkgs "nvim-jdtls" {
@@ -143,7 +143,7 @@ in
           pattern = "java";
           callback.__raw = ''
             function ()
-              require('jdtls').start_or_attach(${helpers.toLuaObject options})
+              require('jdtls').start_or_attach(${lib.nixvim.toLuaObject options})
             end
           '';
         }

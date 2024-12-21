@@ -22,7 +22,7 @@ let
   };
 in
 {
-  options.plugins.harpoon = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.harpoon = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "harpoon";
 
     package = lib.mkPackageOption pkgs "harpoon" {
@@ -205,7 +205,7 @@ in
           telescopeCfg = ''require("telescope").load_extension("harpoon")'';
         in
         ''
-          require('harpoon').setup(${helpers.toLuaObject setupOptions})
+          require('harpoon').setup(${lib.nixvim.toLuaObject setupOptions})
           ${if cfg.enableTelescope then telescopeCfg else ""}
         '';
 

@@ -5,9 +5,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "refactoring";
-  originalName = "refactoring.nvim";
+  packPathName = "refactoring.nvim";
   package = "refactoring-nvim";
 
   maintainers = [ maintainers.MattSturgeon ];

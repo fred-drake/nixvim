@@ -12,7 +12,7 @@ let
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 in
 {
-  options.plugins.chadtree = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.chadtree = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "chadtree";
 
     package = lib.mkPackageOption pkgs "chadtree" {
@@ -516,7 +516,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        vim.api.nvim_set_var("chadtree_settings", ${helpers.toLuaObject setupOptions})
+        vim.api.nvim_set_var("chadtree_settings", ${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }
